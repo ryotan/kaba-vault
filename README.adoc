@@ -10,4 +10,4 @@ vault toolbox.
 
 Copyright © 2016- https://github.com/ryotan[ryotan]
 
-Kaba Vault is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for more information.
+Kaba Vault is licensed under the Apache License, Version 2.0. See link:LICENSE[LICENSE] for more information.

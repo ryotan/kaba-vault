@@ -3,6 +3,11 @@ package pw.itr0.kaba.encrypt
 import spock.lang.Specification
 import spock.lang.Unroll
 
+/**
+ * Specification class for {@link PasswordUtil}.
+ *
+ * @author ryotan
+ */
 @Unroll
 class PasswordUtilSpec extends Specification {
 
@@ -50,5 +55,12 @@ class PasswordUtilSpec extends Specification {
     'シール' | _
     'sealed:A' | _
     '1234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567890000000000012345678901234576890' | _
+  }
+
+  def "カバレッジツールがprivate constructorをignoreしてくれればいいのに。。。"() {
+    def util = new PasswordUtil();
+
+    expect:
+    util != null
   }
 }

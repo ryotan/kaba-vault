@@ -8,12 +8,16 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 /**
  * Utility class for PBE encryption/decryption.
@@ -26,7 +30,13 @@ public final class PBE {
     /**
      * PBE encryption algorithm name.
      */
-    private static final String ENCRYPTION_ALGORITHM = "PBEWithHMACSHA512AndAES_256";
+    private static final String ENCRYPTION_ALGORITHM = "PBEWithHMACSHA1AndAES_256";
+
+    /**
+     * {@link MessageDigest} algorithm to generate IV.
+     * <p>
+     * Because {@value #ENCRYPTION_ALGORITHM} requires 16byte length IV, this algorithm should generate 16byte(128bit) length byte array.
+     */
     private static final String DIGEST_ALGORITHM_TO_GENERATE_IV = "MD5";
 
     /**
@@ -122,19 +132,26 @@ public final class PBE {
         }
     }
 
-    private static byte[] generateIV(char[] password, byte[] salt) {
+    /**
+     * Generate IV according to Open SSL like algorithm.
+     *
+     * @param chars chars used to generate IV
+     * @param bytes bytes used to generate IV
+     * @return generated IV
+     */
+    private static byte[] generateIV(char[] chars, byte[] bytes) {
+        ByteBuffer buffer = Charset.forName("US-ASCII").encode(CharBuffer.wrap(chars));
+        byte[] copiedChars = new byte[chars.length];
+        buffer.get(copiedChars, 0, chars.length);
+        byte[] copiedBytes = Arrays.copyOf(bytes, bytes.length);
+
         try {
-            byte[] bytes = new byte[password.length];
-            for (int i = 0; i < password.length; i++) {
-                bytes[i] = (byte) password[i];
-            }
             final MessageDigest md5 = MessageDigest.getInstance(DIGEST_ALGORITHM_TO_GENERATE_IV);
-            md5.update(bytes);
-            md5.update(salt);
-            final byte[] enc = md5.digest();
-            md5.update(enc);
-            md5.update(bytes);
-            md5.update(salt);
+            md5.update(copiedChars);
+            md5.update(copiedBytes);
+            md5.update(md5.digest());
+            md5.update(copiedChars);
+            md5.update(copiedBytes);
             return md5.digest();
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException(DIGEST_ALGORITHM_TO_GENERATE_IV + " is not available on current JDK.", e);

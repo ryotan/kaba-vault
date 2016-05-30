@@ -12,8 +12,9 @@ general:
       - /release\/.*/ # or ignore regexes
 
 test:
-  override:
-    - mvn verify
   post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - mvn jacoco:report jacoco:report-integration
     - curl https://www.jpm4j.org/install/script | sudo sh && sudo jpm install com.codacy:codacy-coverage-reporter:assembly
         && codacy-coverage-reporter -l Java -r target/site/jacoco/jacoco.xml --projectToken ${CODACY_PROJECT_TOKEN}

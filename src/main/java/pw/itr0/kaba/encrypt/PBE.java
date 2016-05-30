@@ -30,14 +30,14 @@ public final class PBE {
     /**
      * PBE encryption algorithm name.
      */
-    private static final String ENCRYPTION_ALGORITHM = "PBEWithHMACSHA1AndAES_256";
+    private static final String ENCRYPTION_ALGORITHM = "PBEWithHMACSHA512AndAES_128";
 
     /**
      * {@link MessageDigest} algorithm to generate IV.
      * <p>
      * Because {@value #ENCRYPTION_ALGORITHM} requires 16byte length IV, this algorithm should generate 16byte(128bit) length byte array.
      */
-    private static final String DIGEST_ALGORITHM_TO_GENERATE_IV = "MD5";
+    private static final String DIGEST_ALGORITHM = "MD5";
 
     /**
      * Default salt bytes of PBE encryption.
@@ -146,7 +146,7 @@ public final class PBE {
         byte[] copiedBytes = Arrays.copyOf(bytes, bytes.length);
 
         try {
-            final MessageDigest md5 = MessageDigest.getInstance(DIGEST_ALGORITHM_TO_GENERATE_IV);
+            final MessageDigest md5 = MessageDigest.getInstance(DIGEST_ALGORITHM);
             md5.update(copiedChars);
             md5.update(copiedBytes);
             md5.update(md5.digest());
@@ -154,7 +154,7 @@ public final class PBE {
             md5.update(copiedBytes);
             return md5.digest();
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(DIGEST_ALGORITHM_TO_GENERATE_IV + " is not available on current JDK.", e);
+            throw new IllegalStateException(DIGEST_ALGORITHM + " is not available on current JDK.", e);
         }
     }
 

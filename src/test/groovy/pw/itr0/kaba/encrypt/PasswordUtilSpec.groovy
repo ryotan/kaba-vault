@@ -17,17 +17,14 @@ class PasswordUtilSpec extends Specification {
 
     where:
     password                     | sealed
-    'some password'              | 'SEALED:V1:1bB3EbMcYByendrEC4vraA=='
-    ''                           | 'SEALED:V1:5+IVMWze0DvH/D4ASnPCfg=='
-    '1'                          | 'SEALED:V1:/NSAZuGWFvggJPa5aQI27g=='
-    'シール'                        | 'SEALED:V1:BFWYEOZKpYWP1l6v5RLX0A=='
-    'sealed:A'                   | 'SEALED:V1:fSPdLoWYap3r1qpOa/Talg=='
-    '123456789123456789123456789' +
-        '123456789123456789123456789' +
-        '123456789123456789123456789' +
-        '123456789123456789000000000' +
+    'some password'              | 'SEALED:V1:dOWFWhYR+T51iFvpoJVuEg=='
+    ''                           | 'SEALED:V1:sJuog59Tn4NavQhPaWuLJg=='
+    '1'                          | 'SEALED:V1:hLop0nXnx/RKEQXKjNVFCQ=='
+    'シール'                        | 'SEALED:V1:GxlNbVVii3RZgzjgbvaZ4g=='
+    'sealed:A'                   | 'SEALED:V1:FbxS2THauf8Kk1fzWbrk1Q=='
+    '123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789000000000' +
         '0012345678901234576890' |
-        'SEALED:V1:3c8oJx0t2gN/xuOgXi2y9nP3GkULKcaR72d9jrA2kFjHG0RtZYFyVb5UrNCsNhHUdcB1ZbnqEp/uZgMYkUjM4p7u/V7q8UgBJBzbK8l4Y7LxC4cva/+LD9NOJMEfX3lFMLMOICG128OkVpPsgJYjK5OlBBSsOsVWn2X7XfzdjTXlJq13RtzPqKjyjmMH/Wi9'
+        'SEALED:V1:Rkce7vJsTGPluTk+cRi7iJnFCC0hFalcUzYewJGkKS0xKcKgO7vKkUTLI/PEQLEjpvTzzYPaUGmqrpA1jmDPH+BMOXhQ64TULiI0xGM+VWA+Ph/t8O8/fiYtm8oyzhXIxfNawUNa/z3x4x5vnhxNP3wxn7lo32yRup2U7lgJedwvOyKwaxUXBdUizIFuUEjV'
   }
 
   def '暗号化されたパスワードが、正しく復号できること'(String password, String sealed) {
@@ -36,17 +33,14 @@ class PasswordUtilSpec extends Specification {
 
     where:
     password                     | sealed
-    'some password'              | 'SEALED:V1:1bB3EbMcYByendrEC4vraA=='
-    ''                           | 'SEALED:V1:5+IVMWze0DvH/D4ASnPCfg=='
-    '1'                          | 'SEALED:V1:/NSAZuGWFvggJPa5aQI27g=='
-    'シール'                        | 'SEALED:V1:BFWYEOZKpYWP1l6v5RLX0A=='
-    'sealed:A'                   | 'SEALED:V1:fSPdLoWYap3r1qpOa/Talg=='
-    '123456789123456789123456789' +
-        '123456789123456789123456789' +
-        '123456789123456789123456789' +
-        '123456789123456789000000000' +
+    'some password'              | 'SEALED:V1:dOWFWhYR+T51iFvpoJVuEg=='
+    ''                           | 'SEALED:V1:sJuog59Tn4NavQhPaWuLJg=='
+    '1'                          | 'SEALED:V1:hLop0nXnx/RKEQXKjNVFCQ=='
+    'シール'                        | 'SEALED:V1:GxlNbVVii3RZgzjgbvaZ4g=='
+    'sealed:A'                   | 'SEALED:V1:FbxS2THauf8Kk1fzWbrk1Q=='
+    '123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789000000000' +
         '0012345678901234576890' |
-        'SEALED:V1:3c8oJx0t2gN/xuOgXi2y9nP3GkULKcaR72d9jrA2kFjHG0RtZYFyVb5UrNCsNhHUdcB1ZbnqEp/uZgMYkUjM4p7u/V7q8UgBJBzbK8l4Y7LxC4cva/+LD9NOJMEfX3lFMLMOICG128OkVpPsgJYjK5OlBBSsOsVWn2X7XfzdjTXlJq13RtzPqKjyjmMH/Wi9'
+        'SEALED:V1:Rkce7vJsTGPluTk+cRi7iJnFCC0hFalcUzYewJGkKS0xKcKgO7vKkUTLI/PEQLEjpvTzzYPaUGmqrpA1jmDPH+BMOXhQ64TULiI0xGM+VWA+Ph/t8O8/fiYtm8oyzhXIxfNawUNa/z3x4x5vnhxNP3wxn7lo32yRup2U7lgJedwvOyKwaxUXBdUizIFuUEjV'
     '12345'                      | '12345'
     ''                           | ''
   }

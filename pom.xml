@@ -82,7 +82,6 @@
           </includes>
           <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
           <failIfNoTests>false</failIfNoTests>
-          <testFailureIgnore>true</testFailureIgnore>
           <reportFormat>xml</reportFormat>
           <trimStackTrace>false</trimStackTrace>
         </configuration>

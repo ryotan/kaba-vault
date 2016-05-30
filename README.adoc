@@ -3,6 +3,7 @@
 image:https://circleci.com/gh/ryotan/kaba-vault.svg?style=shield["CircleCI", link="https://circleci.com/gh/ryotan/kaba-vault"]
 image:https://img.shields.io/github/license/ryotan/kaba-vault.svg?style=flat["Apache License, Version 2.0, January 2004", link="http://www.apache.org/licenses/"]
 image:https://api.codacy.com/project/badge/grade/c2f6640f356144d082825ec1dfd99e7f["Codacy code quality", link="https://www.codacy.com/app/ryotan/kaba-vault?utm_source=github.com&utm_medium=referral&utm_content=ryotan/kaba-vault&utm_campaign=Badge_Grade"]
+image:https://api.codacy.com/project/badge/coverage/c2f6640f356144d082825ec1dfd99e7f["Codacy code coverage", link="https://www.codacy.com/app/ryotan/kaba-vault?utm_source=github.com&utm_medium=referral&utm_content=ryotan/kaba-vault&utm_campaign=Badge_Coverage"]
 
 vault toolbox.
 

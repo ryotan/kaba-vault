@@ -80,6 +80,10 @@
           <includes>
             <include>**/*Spec.java</include>
           </includes>
+          <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+          <failIfNoTests>false</failIfNoTests>
+          <reportFormat>xml</reportFormat>
+          <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
       <plugin>
@@ -90,7 +94,6 @@
           <execution>
             <goals>
               <goal>prepare-agent</goal>
-              <goal>report</goal>
             </goals>
           </execution>
         </executions>

@@ -5,11 +5,13 @@ import pw.itr0.kaba.exception.MissImplementationException;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -24,12 +26,14 @@ public final class PBE {
     /**
      * PBE encryption algorithm name.
      */
-    private static final String ENCRYPTION_ALGORITHM = "PBEWithMD5AndDES";
+    private static final String ENCRYPTION_ALGORITHM = "PBEWithHMACSHA512AndAES_256";
+    private static final String DIGEST_ALGORITHM_TO_GENERATE_IV = "MD5";
 
     /**
      * Default salt bytes of PBE encryption.
      */
     private static final byte[] DEFAULT_SALT = new byte[]{
+            (byte) 0xd8, (byte) 0x3d, (byte) 0xde, (byte) 0x0b, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8,
             (byte) 0xd8, (byte) 0x3d, (byte) 0xde, (byte) 0x0b, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8
     };
 
@@ -106,7 +110,7 @@ public final class PBE {
             Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
             PBEKeySpec keySpec = new PBEKeySpec(password);
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ENCRYPTION_ALGORITHM);
-            PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
+            PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount, new IvParameterSpec(generateIV(password, salt)));
             cipher.init(mode, keyFactory.generateSecret(keySpec), paramSpec);
             return cipher;
         } catch (NoSuchPaddingException e) {
@@ -115,6 +119,25 @@ public final class PBE {
             throw new MissImplementationException("Key specification must be type safely implemented. This exception must not occur.", e);
         } catch (InvalidAlgorithmParameterException e) {
             throw new MissImplementationException("Algorithm parameter must be type safely implemented. This exception must not occur.", e);
+        }
+    }
+
+    private static byte[] generateIV(char[] password, byte[] salt) {
+        try {
+            byte[] bytes = new byte[password.length];
+            for (int i = 0; i < password.length; i++) {
+                bytes[i] = (byte) password[i];
+            }
+            final MessageDigest md5 = MessageDigest.getInstance(DIGEST_ALGORITHM_TO_GENERATE_IV);
+            md5.update(bytes);
+            md5.update(salt);
+            final byte[] enc = md5.digest();
+            md5.update(enc);
+            md5.update(bytes);
+            md5.update(salt);
+            return md5.digest();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(DIGEST_ALGORITHM_TO_GENERATE_IV + " is not available on current JDK.", e);
         }
     }
 

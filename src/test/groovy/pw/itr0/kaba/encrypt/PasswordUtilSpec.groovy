@@ -16,51 +16,59 @@ class PasswordUtilSpec extends Specification {
     PasswordUtil.seal(password.getBytes()) == sealed
 
     where:
-    password | sealed
-    'some password' | 'SEALED:V1:8c+21uvsX27JqwwrmDfcQA=='
-    '' | 'SEALED:V1:CDkY7YDxvuw='
-    '1' | 'SEALED:V1:hPb6NpSc1bc='
-    'シール' | 'SEALED:V1:G4PEVg0j+G8rXS/jZoDF2w=='
-    'sealed:A' | 'SEALED:V1:spI6J3UOsP41TtzoUxr+pA=='
-    '1234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567890000000000012345678901234576890' |
-        'SEALED:V1:ukMBAa2beypIFr90/tXmnkfUmn0JLVPnirTz8/d5thkIIjJwiAeG1BNoPi9LLTDBP48fYxQD7WanEKDxgmGqS+5NE740qZ0R2CKWRKmScqUjokZK4x9uhodMDZNn7bovgfvco8N94C+Gl9NQLQ00C/8W9/2ADlzdfm4pMbIF8I8URneAlm9csw=='
+    password                     | sealed
+    'some password'              | 'SEALED:V1:Zk+uOrXyuvtxctg2aTFbbw=='
+    ''                           | 'SEALED:V1:qgi1AOvFXQRJ6CDEiLa6JA=='
+    '1'                          | 'SEALED:V1:vI568WGuDHH8JMMxr9j0Sg=='
+    'シール'                        | 'SEALED:V1:I4OK+IsNK12FXHDnKSAukA=='
+    'sealed:A'                   | 'SEALED:V1:R86Gn54SP9hOFyvu9OGz0A=='
+    '123456789123456789123456789' +
+        '123456789123456789123456789' +
+        '123456789123456789123456789' +
+        '123456789123456789000000000' +
+        '0012345678901234576890' |
+        'SEALED:V1:5B7cwi4kp4vGEEI97sHTdA7VGkCGgiUwhNw0KMxb3Xi+/Pm1DCL57BB0uKxlWV8NNuxNi9lAFqqwkhcrl0+sdCpweGi3iXOK0+2m3NwE2uOGeab5QIRhxiJJpmWEwnouml2DhANoOPiAEPtOaQ97vmdCUF86YhdC2n3c/4zlowLhC8NFeTeaRzaMLDdwpB1K'
   }
 
-  def '暗号化されたパスワードが、正しく復号ること'(String password, String sealed) {
+  def '暗号化されたパスワードが、正しく復号できること'(String password, String sealed) {
     expect:
     PasswordUtil.unseal(sealed) == password.getBytes()
 
     where:
-    password | sealed
-    'some password' | 'SEALED:V1:8c+21uvsX27JqwwrmDfcQA=='
-    '' | 'SEALED:V1:CDkY7YDxvuw='
-    '1' | 'SEALED:V1:hPb6NpSc1bc='
-    'シール' | 'SEALED:V1:G4PEVg0j+G8rXS/jZoDF2w=='
-    'sealed:A' | 'SEALED:V1:spI6J3UOsP41TtzoUxr+pA=='
-    '1234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567890000000000012345678901234576890' |
-      'SEALED:V1:ukMBAa2beypIFr90/tXmnkfUmn0JLVPnirTz8/d5thkIIjJwiAeG1BNoPi9LLTDBP48fYxQD7WanEKDxgmGqS+5NE740qZ0R2CKWRKmScqUjokZK4x9uhodMDZNn7bovgfvco8N94C+Gl9NQLQ00C/8W9/2ADlzdfm4pMbIF8I8URneAlm9csw=='
-    '12345' | '12345'
-    '' | ''
+    password                     | sealed
+    'some password'              | 'SEALED:V1:Zk+uOrXyuvtxctg2aTFbbw=='
+    ''                           | 'SEALED:V1:qgi1AOvFXQRJ6CDEiLa6JA=='
+    '1'                          | 'SEALED:V1:vI568WGuDHH8JMMxr9j0Sg=='
+    'シール'                        | 'SEALED:V1:I4OK+IsNK12FXHDnKSAukA=='
+    'sealed:A'                   | 'SEALED:V1:R86Gn54SP9hOFyvu9OGz0A=='
+    '123456789123456789123456789' +
+        '123456789123456789123456789' +
+        '123456789123456789123456789' +
+        '123456789123456789000000000' +
+        '0012345678901234576890' |
+        'SEALED:V1:5B7cwi4kp4vGEEI97sHTdA7VGkCGgiUwhNw0KMxb3Xi+/Pm1DCL57BB0uKxlWV8NNuxNi9lAFqqwkhcrl0+sdCpweGi3iXOK0+2m3NwE2uOGeab5QIRhxiJJpmWEwnouml2DhANoOPiAEPtOaQ97vmdCUF86YhdC2n3c/4zlowLhC8NFeTeaRzaMLDdwpB1K'
+    '12345'                      | '12345'
+    ''                           | ''
   }
 
-  def "暗号化されたパスワードを複合できること"(String password) {
+  def "パスワードを暗号化・復号できること"(String password) {
     expect:
     new String(PasswordUtil.unseal(PasswordUtil.seal(password.getBytes()))) == password
 
     where:
-    password | _
-    'some password' | _
-    '' | _
-    '1' | _
-    'シール' | _
-    'sealed:A' | _
+    password                                                                                                                             | _
+    'some password'                                                                                                                      | _
+    ''                                                                                                                                   | _
+    '1'                                                                                                                                  | _
+    'シール'                                                                                                                                | _
+    'sealed:A'                                                                                                                           | _
     '1234567891234567891234567891234567891234567891234567891234567891234567891234567891234567891234567890000000000012345678901234576890' | _
   }
 
   def "カバレッジツールがprivate constructorをignoreしてくれればいいのに。。。"() {
-    def util = new PasswordUtil();
+    def util = new PasswordUtil()
 
     expect:
-    util != null
+    util instanceof PasswordUtil
   }
 }

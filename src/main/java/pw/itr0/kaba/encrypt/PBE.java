@@ -11,7 +11,6 @@ import javax.crypto.spec.PBEParameterSpec;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
@@ -35,7 +34,7 @@ public final class PBE {
     /**
      * {@link MessageDigest} algorithm to generate IV.
      * <p>
-     * Because {@value #ENCRYPTION_ALGORITHM} requires 16byte length IV, this algorithm should generate 16byte(128bit) length byte array.
+     * Because "{@value #ENCRYPTION_ALGORITHM}" requires 16byte length IV, this algorithm should generate 16byte(128bit) length byte array.
      */
     private static final String DIGEST_ALGORITHM = "MD5";
 
@@ -111,10 +110,9 @@ public final class PBE {
      * @param salt           salt of PBE
      * @param iterationCount iteration count of PBE
      * @return {@link Cipher} for PBE encryption/decryption
-     * @throws NoSuchAlgorithmException if the running JRE does not support "{@value ENCRYPTION_ALGORITHM}"
-     * @throws InvalidKeyException      if the given key size exceeds the maximum allowable key size
+     * @throws InvalidKeyException if the given key size exceeds the maximum allowable key size
      */
-    private static Cipher getCipher(int mode, char[] password, byte[] salt, int iterationCount) throws NoSuchAlgorithmException, InvalidKeyException {
+    private static Cipher getCipher(int mode, char[] password, byte[] salt, int iterationCount) throws InvalidKeyException {
 
         try {
             Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
@@ -123,6 +121,8 @@ public final class PBE {
             PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount, new IvParameterSpec(generateIV(password, salt)));
             cipher.init(mode, keyFactory.generateSecret(keySpec), paramSpec);
             return cipher;
+        } catch (NoSuchAlgorithmException e) {
+            throw new MissImplementationException("Encryption/decryption algorithm must be statically implemented. This exception must not occur.", e);
         } catch (NoSuchPaddingException e) {
             throw new MissImplementationException("Padding algorithm must be statically implemented. This exception must not occur.", e);
         } catch (InvalidKeySpecException e) {
@@ -189,16 +189,13 @@ public final class PBE {
         }
 
         /**
-         * Encrypt secret bytes using password for PBE.
-         *
-         * @param password encrypting password
-         * @param secret   secret bytes
-         * @return PBE encrypted secret
-         * @throws GeneralSecurityException on encryption error
+         * {@inheritDoc}
+         * <p>
+         * This implementation return PBE encryption {@link Cipher}.
          */
         @Override
-        public byte[] encrypt(char[] password, byte[] secret) throws GeneralSecurityException {
-            return getCipher(Cipher.ENCRYPT_MODE, password, this.salt, this.iterationCount).doFinal(secret);
+        public Cipher getEncryptionCipher(char[] password) throws InvalidKeyException {
+            return PBE.getCipher(Cipher.ENCRYPT_MODE, password, this.salt, this.iterationCount);
         }
     }
 
@@ -234,16 +231,13 @@ public final class PBE {
         }
 
         /**
-         * Decrypt secret bytes using password for PBE.
-         *
-         * @param password decrypting password
-         * @param secret   secret bytes
-         * @return PBE decrypted secret
-         * @throws GeneralSecurityException on decryption error
+         * {@inheritDoc}
+         * <p>
+         * This implementation return PBE decryption {@link Cipher}.
          */
         @Override
-        public byte[] decrypt(char[] password, byte[] secret) throws GeneralSecurityException {
-            return getCipher(Cipher.DECRYPT_MODE, password, this.salt, this.iterationCount).doFinal(secret);
+        public Cipher getDecryptionCipher(char[] password) throws InvalidKeyException {
+            return PBE.getCipher(Cipher.DECRYPT_MODE, password, this.salt, this.iterationCount);
         }
     }
 }

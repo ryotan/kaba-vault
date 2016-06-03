@@ -31,15 +31,15 @@ public interface PasswordBasedEncrypter {
     /**
      * Encrypt {@code secret} based on password.
      *
-     * @param password encrypting password
      * @param secret   secret bytes
+     * @param password encrypting password
      * @return encrypted secret
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                                   or encryption algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default byte[] encrypt(char[] password, byte[] secret)
+    default byte[] encrypt(byte[] secret, char[] password)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return getEncryptionCipher(password).doFinal(secret);
     }
@@ -49,17 +49,17 @@ public interface PasswordBasedEncrypter {
      * <p>
      * Encrypted secret is encoded as Base64.
      *
-     * @param password encrypting password
      * @param secret   secret bytes
+     * @param password encrypting password
      * @return encrypted secret (Base64 encoded string)
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                                   or encryption algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default String encrypt64(char[] password, byte[] secret)
+    default String encrypt64(byte[] secret, char[] password)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        return Base64.getEncoder().encodeToString(this.encrypt(password, secret));
+        return Base64.getEncoder().encodeToString(this.encrypt(secret, password));
     }
 
     /**

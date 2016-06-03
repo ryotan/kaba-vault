@@ -31,15 +31,15 @@ public interface PasswordBasedDecrypter {
     /**
      * Decrypt {@code secret} based on password.
      *
-     * @param password decrypting password
      * @param secret   secret bytes
+     * @param password decrypting password
      * @return decrypted secret
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using decrypting algorithm,
      *                                   or decrypting algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default byte[] decrypt(char[] password, byte[] secret)
+    default byte[] decrypt(byte[] secret, char[] password)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return getDecryptionCipher(password).doFinal(secret);
     }
@@ -49,17 +49,17 @@ public interface PasswordBasedDecrypter {
      * <p>
      * Encrypted secret is encoded as Base64.
      *
-     * @param password decrypting password
      * @param secret   secret bytes (Base64 encoded string)
+     * @param password decrypting password
      * @return decrypted secret
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using decrypting algorithm,
      *                                   or decrypting algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default byte[] decrypt64(char[] password, String secret)
+    default byte[] decrypt64(String secret, char[] password)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        return this.decrypt(password, Base64.getDecoder().decode(secret));
+        return this.decrypt(Base64.getDecoder().decode(secret), password);
     }
 
     /**

@@ -41,7 +41,7 @@ public interface PasswordBasedEncrypter {
      */
     default byte[] encrypt(byte[] secret, char[] password)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        return getEncryptionCipher(password).doFinal(secret);
+        return this.getEncryptionCipher(password).doFinal(secret);
     }
 
     /**
@@ -63,15 +63,15 @@ public interface PasswordBasedEncrypter {
     }
 
     /**
-     * Wrap {@link OutputStream} {@code out} to {@link CipherOutputStream} encrypting with {@code password}.
+     * Wrap {@link OutputStream} {@code output} to {@link CipherOutputStream} encrypting with {@code password}.
      *
-     * @param out      {@link OutputStream} to wrap in {@link CipherOutputStream}
+     * @param output   {@link OutputStream} to wrap in {@link CipherOutputStream}
      * @param password encrypting password
      * @return encrypting {@link OutputStream}
      * @throws InvalidKeyException if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                             or encryption algorithm using specified password length is not usable on current JDK
      */
-    default OutputStream wrap(OutputStream out, char[] password) throws InvalidKeyException {
-        return new CipherOutputStream(out, getEncryptionCipher(password));
+    default OutputStream wrap(OutputStream output, char[] password) throws InvalidKeyException {
+        return new CipherOutputStream(output, this.getEncryptionCipher(password));
     }
 }

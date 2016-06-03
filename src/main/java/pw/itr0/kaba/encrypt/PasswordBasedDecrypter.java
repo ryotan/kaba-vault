@@ -41,7 +41,7 @@ public interface PasswordBasedDecrypter {
      */
     default byte[] decrypt(byte[] secret, char[] password)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        return getDecryptionCipher(password).doFinal(secret);
+        return this.getDecryptionCipher(password).doFinal(secret);
     }
 
     /**
@@ -63,15 +63,15 @@ public interface PasswordBasedDecrypter {
     }
 
     /**
-     * Wrap {@link InputStream} {@code in} to {@link CipherInputStream} decrypting with {@code password}.
+     * Wrap {@link InputStream} {@code input} to {@link CipherInputStream} decrypting with {@code password}.
      *
-     * @param in       {@link InputStream} to wrap in {@link CipherInputStream}
+     * @param input    {@link InputStream} to wrap in {@link CipherInputStream}
      * @param password decrypting password
      * @return decrypting {@link InputStream}
      * @throws InvalidKeyException if the {@code password} does not satisfy password specification of using decrypting algorithm,
      *                             or decrypting algorithm using specified password length is not usable on current JDK
      */
-    default InputStream wrap(InputStream in, char[] password) throws InvalidKeyException {
-        return new CipherInputStream(in, getDecryptionCipher(password));
+    default InputStream wrap(InputStream input, char[] password) throws InvalidKeyException {
+        return new CipherInputStream(input, this.getDecryptionCipher(password));
     }
 }

@@ -154,7 +154,7 @@ public final class PBE {
             md5.update(copiedBytes);
             return md5.digest();
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(DIGEST_ALGORITHM + " is not available on current JDK.", e);
+            throw new MissImplementationException(DIGEST_ALGORITHM + " is not available on current JDK.", e);
         }
     }
 

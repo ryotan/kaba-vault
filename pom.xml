@@ -19,16 +19,17 @@
 
   <licenses>
     <license>
-      <name>Apache 2.0 License</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <name>Apache-2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <comments>Apache License, Version 2.0</comments>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <scm>
     <url>https://github.com/ryotan/kaba-vault</url>
-    <connection>https://github.com/ryotan/kaba-vault.git</connection>
-    <developerConnection>git@github.com:ryotan/kaba-vault.git</developerConnection>
+    <connection>scm:git:https://github.com/ryotan/kaba-vault.git</connection>
+    <developerConnection>scm:git:git@github.com:ryotan/kaba-vault.git</developerConnection>
   </scm>
   <issueManagement>
     <system>GitHub</system>
@@ -77,16 +78,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.2</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
@@ -164,7 +155,15 @@
   <distributionManagement>
     <repository>
       <id>bintray</id>
-      <url>https://api.bintray.com/maven/ryotan/repo/kaba-vault/;publish=1</url>
+      <url>https://api.bintray.com/maven/ryotan/maven/kaba-vault/;publish=1</url>
     </repository>
+    <snapshotRepository>
+      <id>bintray</id>
+      <url>https://api.bintray.com/maven/ryotan/maven/kaba-vault/;publish=1</url>
+    </snapshotRepository>
   </distributionManagement>
+
+  <prerequisites>
+    <maven>3.2.4</maven>
+  </prerequisites>
 </project>

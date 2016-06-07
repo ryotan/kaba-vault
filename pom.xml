@@ -155,11 +155,11 @@
   <distributionManagement>
     <repository>
       <id>bintray</id>
-      <url>https://api.bintray.com/maven/ryotan/maven/kaba-vault/;publish=1</url>
+      <url>https://api.bintray.com/maven/ryotan/maven/kaba-vault/</url>
     </repository>
     <snapshotRepository>
       <id>bintray</id>
-      <url>https://api.bintray.com/maven/ryotan/maven/kaba-vault/;publish=1</url>
+      <url>http://oss.jfrog.org/oss-snapshot-local/</url>
     </snapshotRepository>
   </distributionManagement>
 

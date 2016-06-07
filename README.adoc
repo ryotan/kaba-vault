@@ -7,6 +7,27 @@ image:https://api.codacy.com/project/badge/coverage/c2f6640f356144d082825ec1dfd9
 
 vault toolbox.
 
+== Usage
+
+To use `SNAPSHOT` version.
+
+[xml]
+----
+<repositories>
+    <repository>
+        <id>jfrog-oss-snapshot</id>
+        <name>JFrog OSS Snapshots</name>
+        <url>https://oss.jfrog.org/libs-snapshot</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+----
+
 == License
 
 Copyright © 2016- https://github.com/ryotan[ryotan]

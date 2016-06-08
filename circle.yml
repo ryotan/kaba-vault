@@ -15,8 +15,7 @@ dependencies:
   pre:
     - bash ci/install-coverage-reporter.sh
   cache_directories:
-    - /var/jpm
-    - /usr/local/bin
+    - ~/.jpm
 
 test:
   post:

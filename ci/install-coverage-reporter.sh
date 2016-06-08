@@ -2,15 +2,8 @@
 
 ls -AlR ~/.jpm
 
-if [[ -d "~/.jpm/jpm" ]]; then
-    sudo chmod -R 755
-    sudo cp -vrp ~/.jpm/jpm /var/
-fi
-
-if [[ -d "~/.jpm/bin" ]]; then
-    sudo chmod 755 ~/.jpm/bin/*
-    sudo cp -vp ~/.jpm/bin/* /usr/local/bin/
-fi
+sudo cp -vrp ~/.jpm/jpm /var/
+sudo cp -vp ~/.jpm/bin/* /usr/local/bin/
 
 if [[ ! $(builtin command -v jpm) ]]; then
   curl https://www.jpm4j.org/install/script | sudo sh

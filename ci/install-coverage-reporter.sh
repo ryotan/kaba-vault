@@ -16,12 +16,12 @@ if [[ ! $(builtin command -v codacy-coverage-reporter) ]]; then
   sudo jpm install com.codacy:codacy-coverage-reporter:assembly
 fi
 
-mkdir -p ~/.jpm/bin
+sudo mkdir -p ~/.jpm/bin
 
 if [[ ! -d "~/.jpm/jpm" ]]; then
-  cp -r /var/jpm ~/.jpm/
+  sudo cp -r /var/jpm ~/.jpm/
 fi
 
 if [[ ! -d "~/.jpm/bin" ]]; then
-  cp /usr/local/bin/{jpm, codacy-coverage-reporter} ~/.jpm/bin/
+  sudo cp /usr/local/bin/{jpm, codacy-coverage-reporter} ~/.jpm/bin/
 fi

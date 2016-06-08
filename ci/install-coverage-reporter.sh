@@ -1,11 +1,15 @@
 #!/bin/bash
 
+ll ~/.jpm
+
 if [[ -d "~/.jpm/jpm" ]]; then
-    sudo cp -r ~/.jpm/jpm /var/
+    sudo chmod -R 755
+    sudo cp -rp ~/.jpm/jpm /var/
 fi
 
 if [[ -d "~/.jpm/bin" ]]; then
-    sudo cp ~/.jpm/bin/* /usr/local/bin/
+    sudo chmod 755 ~/.jpm/bin/*
+    sudo cp -p ~/.jpm/bin/* /usr/local/bin/
 fi
 
 if [[ ! $(builtin command -v jpm) ]]; then

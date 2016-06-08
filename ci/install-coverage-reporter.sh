@@ -5,7 +5,7 @@ if [[ -d "~/.jpm/jpm" ]]; then
 fi
 
 if [[ -d "~/.jpm/bin" ]]; then
-    sudo cp ~/.jpm/bin/* codacy-coverage-reporter} /usr/local/bin/
+    sudo cp ~/.jpm/bin/* /usr/local/bin/
 fi
 
 if [[ ! $(builtin command -v jpm) ]]; then
@@ -23,5 +23,5 @@ if [[ ! -d "~/.jpm/jpm" ]]; then
 fi
 
 if [[ ! -d "~/.jpm/bin" ]]; then
-  sudo cp /usr/local/bin/{jpm, codacy-coverage-reporter} ~/.jpm/bin/
+  sudo cp /usr/local/bin/{jpm,codacy-coverage-reporter} ~/.jpm/bin/
 fi

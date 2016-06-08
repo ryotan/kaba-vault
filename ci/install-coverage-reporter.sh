@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ll ~/.jpm
+ls -AlR ~/.jpm
 
 if [[ -d "~/.jpm/jpm" ]]; then
     sudo chmod -R 755

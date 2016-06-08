@@ -45,7 +45,7 @@ public final class PasswordUtil {
                 '#', '#', '#', ' ', 'n', 'o', 't', ' ', 's', 'o', ' ', 'm', 'u', 'c', 'h', ' ', 's', 'e', 'c', 'r', 'e', 't', ' ', 'p', 'a', 's',
                 's', 'w', 'o', 'r', 'd', ' ', '*', '*', '*'
         };
-        String encrypted = PBE.getEncrypter().encrypt64(notSecretPassword, password);
+        String encrypted = PBE.getEncrypter().encrypt64(password, notSecretPassword);
         Arrays.fill(notSecretPassword, (char) 0x00); // セキュリティ情報なので上書き削除しておく。
 
         return SEALED_PASSWORD_PREFIX + encrypted;
@@ -72,7 +72,7 @@ public final class PasswordUtil {
                 '#', '#', '#', ' ', 'n', 'o', 't', ' ', 's', 'o', ' ', 'm', 'u', 'c', 'h', ' ', 's', 'e', 'c', 'r', 'e', 't', ' ', 'p', 'a', 's',
                 's', 'w', 'o', 'r', 'd', ' ', '*', '*', '*'
         };
-        byte[] decrypted = PBE.getDecrypter().decrypt64(notSecretPassword, password.substring(SEALED_PASSWORD_PREFIX.length(), password.length()));
+        byte[] decrypted = PBE.getDecrypter().decrypt64(password.substring(SEALED_PASSWORD_PREFIX.length(), password.length()), notSecretPassword);
         Arrays.fill(notSecretPassword, (char) 0x00); // セキュリティ情報なので上書き削除しておく。
 
         return decrypted;

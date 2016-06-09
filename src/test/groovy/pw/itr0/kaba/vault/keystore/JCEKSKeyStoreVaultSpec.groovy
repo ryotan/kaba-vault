@@ -6,28 +6,42 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-/**
- *
- * @author Ryo Tanaka
- */
+import java.nio.file.Files
+import java.nio.file.Path
+
 @Unroll
 class JCEKSKeyStoreVaultSpec extends Specification {
   @ClassRule
   @Shared
   TemporaryFolder tmp = new TemporaryFolder();
 
-  def "保存"() {
+  def "指定されたキーストアファイルが存在しない場合は、インスタンス生成時に空のキーストアファイルが新規作成されること。"() {
     given:
-    def vault = new JCEKSKeyStoreVault(new File("${tmp.getRoot()}/store-test.ks").toPath(), "password".toCharArray())
+    def ksPath = newKeyStorePath()
 
     when:
-    def list = vault.list()
-    vault.store('alias name', new KeyStoreEntry())
+    def vault = new SecretKeyStoreVault(ksPath, "password".chars)
 
     then:
-    list.isEmpty()
+    vault.list().isEmpty()
   }
 
-  def "保存２"() {
+  def "新規作成されたキーストアファイルに、共通鍵を保存できること。"() {
+    given:
+    def vault = new SecretKeyStoreVault(newKeyStorePath(), 'password for KeyStore'.chars)
+    def secret = 'secret phrase to be encrypted.'.bytes
+
+    when:
+    vault.store('secret string to be stored without password.', secret)
+
+    then:
+    vault.retrieve('secret string to be stored without password.') == secret
+  }
+
+  private Path newKeyStorePath() {
+    def ksPath = tmp.newFile().toPath()
+    Files.deleteIfExists(ksPath)
+    assert !Files.exists(ksPath)
+    return ksPath
   }
 }

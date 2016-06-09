@@ -2,12 +2,10 @@ package pw.itr0.kaba.vault;
 
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
-/**
- * @author Ryo Tanaka
- */
 public interface Vault<T> {
 
     List<String> list() throws KeyStoreException;
@@ -16,8 +14,11 @@ public interface Vault<T> {
 
     void store(String name, T secret, char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException, KeyStoreException;
 
-    T retrieve(String name);
+    byte[] retrieve(String name) throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException;
 
-    T retrieve(String name, char[] password);
+    byte[] retrieve(String name, char[] password);
 
+    void delete(String name);
+
+    void delete(String name, char[] password);
 }

@@ -62,12 +62,20 @@ public class JCEKSKeyStoreVault implements Vault<KeyStoreEntry> {
     }
 
     @Override
-    public KeyStoreEntry retrieve(String name) {
+    public byte[] retrieve(String name) {
         return null;
     }
 
     @Override
-    public KeyStoreEntry retrieve(String name, char[] password) {
+    public byte[] retrieve(String name, char[] password) {
         return null;
+    }
+
+    @Override
+    public void delete(String name) {
+    }
+
+    @Override
+    public void delete(String name, char[] password) {
     }
 }

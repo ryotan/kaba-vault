@@ -9,12 +9,25 @@ general:
   branches:
     ignore:
       - gh-pages # list of branches to ignore
-      - /release\/.*/ # or ignore regexes
+
+dependencies:
+  pre:
+    - bash ci/install-coverage-reporter.sh
+  cache_directories:
+    - ~/.jpm
 
 test:
   post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-    - mvn jacoco:report jacoco:report-integration
-    - curl https://www.jpm4j.org/install/script | sudo sh && sudo jpm install com.codacy:codacy-coverage-reporter:assembly
-        && codacy-coverage-reporter -l Java -r target/site/jacoco/jacoco.xml --projectToken ${CODACY_PROJECT_TOKEN}
+    - mvn jacoco:report
+    - codacy-coverage-reporter -l Java -r target/site/jacoco/jacoco.xml --projectToken ${CODACY_PROJECT_TOKEN}
+    - mv ./target/surefire-reports $CIRCLE_TEST_REPORTS/junit
+
+deployment:
+  release: # just a label; label names are completely up to you
+    branch: /release\/.*/
+    commands:
+      - mvn deploy
+  snapshot:
+    branch: develop
+    commands:
+      - mvn deploy

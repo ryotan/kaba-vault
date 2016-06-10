@@ -27,7 +27,7 @@ deployment:
     tag: /v[0-9]+(\.[0-9]+)*/
     commands:
       - mvn -s ci/settings.xml deploy
-      - curl --user ${BINTRAY_USER}\:${BINTRAY_TOKEN} -X POST -H "X-GPG-PASSPHRASE\: ${GPG_SECRET_PASSWORD}" https://api.bintray.com/gpg/ryotan/maven/kaba-vault/versions/$(echo ${CIRCLE_TAG} | sed -e 's/^v//')
+      - curl --user ${BINTRAY_USER}\:${BINTRAY_TOKEN} -X POST -H "X-GPG-PASSPHRASE:${GPG_SECRET_PASSWORD}" https://api.bintray.com/gpg/ryotan/maven/kaba-vault/versions/$(echo ${CIRCLE_TAG} | sed -e 's/^v//')
   snapshot:
     branch: develop
     commands:

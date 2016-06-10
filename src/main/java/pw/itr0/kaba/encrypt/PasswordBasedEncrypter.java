@@ -1,12 +1,12 @@
 package pw.itr0.kaba.encrypt;
 
+import java.io.OutputStream;
+import java.security.InvalidKeyException;
+import java.util.Base64;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.IllegalBlockSizeException;
-import java.io.OutputStream;
-import java.security.InvalidKeyException;
-import java.util.Base64;
 
 /**
  * Interface for class to encrypt byte array based on password.
@@ -23,6 +23,7 @@ public interface PasswordBasedEncrypter {
      *
      * @param password encrypting password
      * @return {@link Cipher} to be used on encrypt
+     *
      * @throws InvalidKeyException if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                             or encryption algorithm using specified password length is not usable on current JDK
      */
@@ -34,13 +35,13 @@ public interface PasswordBasedEncrypter {
      * @param secret   secret bytes
      * @param password encrypting password
      * @return encrypted secret
+     *
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                                   or encryption algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default byte[] encrypt(byte[] secret, char[] password)
-            throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    default byte[] encrypt(byte[] secret, char[] password) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return this.getEncryptionCipher(password).doFinal(secret);
     }
 
@@ -52,13 +53,13 @@ public interface PasswordBasedEncrypter {
      * @param secret   secret bytes
      * @param password encrypting password
      * @return encrypted secret (Base64 encoded string)
+     *
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                                   or encryption algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default String encrypt64(byte[] secret, char[] password)
-            throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    default String encrypt64(byte[] secret, char[] password) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return Base64.getEncoder().encodeToString(this.encrypt(secret, password));
     }
 
@@ -68,6 +69,7 @@ public interface PasswordBasedEncrypter {
      * @param output   {@link OutputStream} to wrap in {@link CipherOutputStream}
      * @param password encrypting password
      * @return encrypting {@link OutputStream}
+     *
      * @throws InvalidKeyException if the {@code password} does not satisfy password specification of using encryption algorithm,
      *                             or encryption algorithm using specified password length is not usable on current JDK
      */

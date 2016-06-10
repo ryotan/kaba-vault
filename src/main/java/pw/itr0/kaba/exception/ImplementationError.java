@@ -32,7 +32,6 @@ public class ImplementationError extends RuntimeException {
         super(message, cause);
     }
 
-
     /**
      * Constructs a new exception with the specified cause.
      *

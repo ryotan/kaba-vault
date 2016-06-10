@@ -1,12 +1,12 @@
 package pw.itr0.kaba.encrypt;
 
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.util.Base64;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.IllegalBlockSizeException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.util.Base64;
 
 /**
  * Interface for class to decrypt byte array based on password.
@@ -23,6 +23,7 @@ public interface PasswordBasedDecrypter {
      *
      * @param password decrypting password
      * @return {@link Cipher} to be used on decrypt
+     *
      * @throws InvalidKeyException if the {@code password} does not satisfy password specification of using decryption algorithm,
      *                             or decryption algorithm using specified password length is not usable on current JDK
      */
@@ -34,13 +35,13 @@ public interface PasswordBasedDecrypter {
      * @param secret   secret bytes
      * @param password decrypting password
      * @return decrypted secret
+     *
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using decrypting algorithm,
      *                                   or decrypting algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default byte[] decrypt(byte[] secret, char[] password)
-            throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    default byte[] decrypt(byte[] secret, char[] password) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return this.getDecryptionCipher(password).doFinal(secret);
     }
 
@@ -52,13 +53,13 @@ public interface PasswordBasedDecrypter {
      * @param secret   secret bytes (Base64 encoded string)
      * @param password decrypting password
      * @return decrypted secret
+     *
      * @throws InvalidKeyException       if the {@code password} does not satisfy password specification of using decrypting algorithm,
      *                                   or decrypting algorithm using specified password length is not usable on current JDK
      * @throws BadPaddingException       if the {@code secret} is not properly padded
      * @throws IllegalBlockSizeException if the {@code secret} has wrong length
      */
-    default byte[] decrypt64(String secret, char[] password)
-            throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    default byte[] decrypt64(String secret, char[] password) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return this.decrypt(Base64.getDecoder().decode(secret), password);
     }
 
@@ -68,6 +69,7 @@ public interface PasswordBasedDecrypter {
      * @param input    {@link InputStream} to wrap in {@link CipherInputStream}
      * @param password decrypting password
      * @return decrypting {@link InputStream}
+     *
      * @throws InvalidKeyException if the {@code password} does not satisfy password specification of using decrypting algorithm,
      *                             or decrypting algorithm using specified password length is not usable on current JDK
      */

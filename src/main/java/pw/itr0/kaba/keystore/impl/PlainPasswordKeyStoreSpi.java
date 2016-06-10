@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Enumeration;
 
 public class PlainPasswordKeyStoreSpi extends KeyStoreSpi {
+
     private final KeyStore delegate;
 
     PlainPasswordKeyStoreSpi(KeyStore delegate) {

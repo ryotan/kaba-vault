@@ -36,12 +36,13 @@ public final class PasswordUtil {
      *
      * @param password encryption target
      * @return PBE encrypted password
+     *
      * @throws GeneralSecurityException on encryption failure
      */
     public static String seal(byte[] password) throws GeneralSecurityException {
         Objects.requireNonNull(password, PASSWORD_MUST_NOT_BE_NULL);
 
-        char[] notSecretPassword = new char[]{
+        char[] notSecretPassword = new char[] {
                 '#', '#', '#', ' ', 'n', 'o', 't', ' ', 's', 'o', ' ', 'm', 'u', 'c', 'h', ' ', 's', 'e', 'c', 'r', 'e', 't', ' ', 'p', 'a', 's',
                 's', 'w', 'o', 'r', 'd', ' ', '*', '*', '*'
         };
@@ -59,6 +60,7 @@ public final class PasswordUtil {
      *
      * @param password decryption target
      * @return decrypted password
+     *
      * @throws GeneralSecurityException on decryption failure
      */
     public static byte[] unseal(String password) throws GeneralSecurityException {
@@ -68,7 +70,7 @@ public final class PasswordUtil {
             return password.getBytes();
         }
 
-        char[] notSecretPassword = new char[]{
+        char[] notSecretPassword = new char[] {
                 '#', '#', '#', ' ', 'n', 'o', 't', ' ', 's', 'o', ' ', 'm', 'u', 'c', 'h', ' ', 's', 'e', 'c', 'r', 'e', 't', ' ', 'p', 'a', 's',
                 's', 'w', 'o', 'r', 'd', ' ', '*', '*', '*'
         };

@@ -67,7 +67,7 @@ public final class PBE {
     /**
      * Returns PBE encrypter whose salt is {@code salt} and iterationCount is {@code iterationCount}.
      *
-     * @param salt salt of PBE encryption
+     * @param salt           salt of PBE encryption
      * @param iterationCount iteration count of PBE encryption
      * @return PBE encrypter
      */
@@ -87,7 +87,7 @@ public final class PBE {
     /**
      * Returns PBE decrypter whose salt is {@code salt} and iterationCount is {@code iterationCount}.
      *
-     * @param salt salt of PBE decryption
+     * @param salt           salt of PBE decryption
      * @param iterationCount iteration count of PBE decryption
      * @return PBE decrypter
      */
@@ -98,11 +98,12 @@ public final class PBE {
     /**
      * Returns {@link Cipher} for PBE encryption/decryption.
      *
-     * @param mode encryption({@link Cipher#ENCRYPT_MODE})/decryption({@link Cipher#DECRYPT_MODE})
-     * @param password password of PBE
-     * @param salt salt of PBE
+     * @param mode           encryption({@link Cipher#ENCRYPT_MODE})/decryption({@link Cipher#DECRYPT_MODE})
+     * @param password       password of PBE
+     * @param salt           salt of PBE
      * @param iterationCount iteration count of PBE
      * @return {@link Cipher} for PBE encryption/decryption
+     *
      * @throws InvalidKeyException if the given key size exceeds the maximum allowable key size
      */
     private static Cipher getCipher(int mode, char[] password, byte[] salt, int iterationCount) throws InvalidKeyException {
@@ -170,7 +171,7 @@ public final class PBE {
         /**
          * Create PBE encrypter using given {@code salt} and {@code iterationCount}.
          *
-         * @param salt salt bytes of PBE encryption
+         * @param salt           salt bytes of PBE encryption
          * @param iterationCount iteration count of PBE encryption
          */
         private Encrypter(byte[] salt, int iterationCount) {
@@ -210,7 +211,7 @@ public final class PBE {
         /**
          * Create PBE decrypter using given {@code salt} and {@code iterationCount}.
          *
-         * @param salt salt bytes of PBE decryption
+         * @param salt           salt bytes of PBE decryption
          * @param iterationCount iteration count of PBE decryption
          */
         private Decrypter(byte[] salt, int iterationCount) {

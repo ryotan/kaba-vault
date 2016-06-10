@@ -44,7 +44,7 @@ public final class CharUtil {
     /**
      * Converts char array to byte array using {@code charset}.
      *
-     * @param chars converting char array
+     * @param chars   converting char array
      * @param charset character set used to encode character to bytes
      * @return converted byte array
      */
@@ -55,7 +55,7 @@ public final class CharUtil {
     /**
      * Converts {@link CharSequence} to byte array using {@code charset}.
      *
-     * @param chars converting {@link CharSequence}
+     * @param chars   converting {@link CharSequence}
      * @param charset character set used to encode characters to bytes
      * @return converted byte array
      */
@@ -75,9 +75,9 @@ public final class CharUtil {
 
     /**
      * Converts byte array to char array using {@code charset}.
-     * @param charset sharacter set used to decode bytes to characters
-     * @param bytes converting byte array
      *
+     * @param charset sharacter set used to decode bytes to characters
+     * @param bytes   converting byte array
      * @return converted char array
      */
     public static char[] chars(byte[] bytes, Charset charset) {

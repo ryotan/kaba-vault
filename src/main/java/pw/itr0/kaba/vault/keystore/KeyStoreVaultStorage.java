@@ -24,7 +24,7 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
     private final KeyStore keyStore;
 
     public KeyStoreVaultStorage(Path path, char[] password) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
-        keyStore = KeyStore.getInstance("JKS");
+        keyStore = KeyStore.getInstance("JCEKS");
         if (Files.exists(path)) {
             try (InputStream file = Files.newInputStream(path)) {
                 keyStore.load(file, password);

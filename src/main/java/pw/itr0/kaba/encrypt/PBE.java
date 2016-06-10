@@ -4,9 +4,11 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
@@ -95,6 +97,22 @@ public final class PBE {
         return new Decrypter(salt.clone(), iterationCount);
     }
 
+    public static SecretKey getSecretKey(char[] password) {
+        PBEKeySpec keySpec = new PBEKeySpec(password, DEFAULT_SALT, DEFAULT_ITERATION_COUNT);
+        try {
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ENCRYPTION_ALGORITHM);
+            return keyFactory.generateSecret(keySpec);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ImplementationError("Encryption/decryption algorithm must be statically implemented. This exception must not occur.", e);
+        } catch (InvalidKeySpecException e) {
+            throw new ImplementationError("Key specification must be type safely implemented. This exception must not occur.", e);
+        }
+    }
+
+    public static AlgorithmParameterSpec getParameterSpec(char[] password, byte[] salt, int iterationCount) {
+        return new PBEParameterSpec(salt, iterationCount, new IvParameterSpec(generateIV(password, salt)));
+    }
+
     /**
      * Returns {@link Cipher} for PBE encryption/decryption.
      *
@@ -110,17 +128,12 @@ public final class PBE {
 
         try {
             Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-            PBEKeySpec keySpec = new PBEKeySpec(password);
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ENCRYPTION_ALGORITHM);
-            PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount, new IvParameterSpec(generateIV(password, salt)));
-            cipher.init(mode, keyFactory.generateSecret(keySpec), paramSpec);
+            cipher.init(mode, PBE.getSecretKey(password), PBE.getParameterSpec(password, salt, iterationCount));
             return cipher;
         } catch (NoSuchAlgorithmException e) {
             throw new ImplementationError("Encryption/decryption algorithm must be statically implemented. This exception must not occur.", e);
         } catch (NoSuchPaddingException e) {
             throw new ImplementationError("Padding algorithm must be statically implemented. This exception must not occur.", e);
-        } catch (InvalidKeySpecException e) {
-            throw new ImplementationError("Key specification must be type safely implemented. This exception must not occur.", e);
         } catch (InvalidAlgorithmParameterException e) {
             throw new ImplementationError("Algorithm parameter must be type safely implemented. This exception must not occur.", e);
         }

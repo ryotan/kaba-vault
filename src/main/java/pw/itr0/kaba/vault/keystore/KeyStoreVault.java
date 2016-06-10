@@ -23,12 +23,12 @@ public class KeyStoreVault implements Vault {
 
     @Override
     public List<String> list() {
-        return null;
+        return storage.list();
     }
 
     @Override
     public boolean contains(String name) {
-        return false;  // TODO: Auto generated code.
+        return storage.contains(name);
     }
 
     @Override
@@ -53,11 +53,6 @@ public class KeyStoreVault implements Vault {
 
     @Override
     public void delete(String name) {
-        // TODO: Auto generated code.
-    }
-
-    @Override
-    public void delete(String name, char[] password) {
-        // TODO: Auto generated code.
+        storage.delete(name);
     }
 }

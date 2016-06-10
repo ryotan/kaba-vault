@@ -1,6 +1,63 @@
 package pw.itr0.kaba.vault.keystore;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.List;
+
 import pw.itr0.kaba.vault.Vault;
 
-public interface KeyStoreVault extends Vault {
+public class KeyStoreVault implements Vault {
+
+    private final KeyStoreVaultStorage storage;
+
+    public KeyStoreVault(Path file, char[] password) {
+        try {
+            this.storage = new KeyStoreVaultStorage(file, password);
+        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<String> list() {
+        return null;
+    }
+
+    @Override
+    public boolean contains(String name) {
+        return false;  // TODO: Auto generated code.
+    }
+
+    @Override
+    public void store(String name, byte[] secret) {
+        storage.store(name, new PBEKeyEntry(secret));
+    }
+
+    @Override
+    public void store(String name, byte[] secret, char[] password) {
+        storage.store(name, new PBEKeyEntry(secret), password);
+    }
+
+    @Override
+    public byte[] retrieveEncoded(String name) {
+        return storage.retrieve(name);
+    }
+
+    @Override
+    public byte[] retrieveEncoded(String name, char[] password) {
+        return storage.retrieve(name, password);
+    }
+
+    @Override
+    public void delete(String name) {
+        // TODO: Auto generated code.
+    }
+
+    @Override
+    public void delete(String name, char[] password) {
+        // TODO: Auto generated code.
+    }
 }

@@ -1,34 +1,45 @@
 package pw.itr0.kaba.vault;
 
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.spec.InvalidKeySpecException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 public interface Vault {
 
-    ConcurrentHashMap<String, Vault> cache = new ConcurrentHashMap<>();
+    List<String> list();
 
-    static Vault computeIfAbsent(String name, Function<String, Vault> factory) {
-        return cache.computeIfAbsent(name, factory);
+    boolean contains(String name);
+
+    void store(String name, byte[] secret);
+
+    void store(String name, byte[] secret, char[] password);
+
+    default void store(String name, String secret) {
+        this.store(name, secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    static Vault get(String name) {
-        return cache.get(name);
+    default void store(String name, String secret, char[] password) {
+        this.store(name, secret.getBytes(StandardCharsets.UTF_8), password);
     }
 
-    List<String> list() throws KeyStoreException;
+    default String retrieve(String name) {
+        byte[] bytes = this.retrieveEncoded(name);
+        if (bytes == null) {
+            return null;
+        }
+        return new String(bytes);
+    }
 
-    void store(String name, byte[] secret) throws NoSuchAlgorithmException, InvalidKeySpecException, KeyStoreException;
+    default String retrieve(String name, char[] password) {
+        byte[] bytes = this.retrieveEncoded(name, password);
+        if (bytes == null) {
+            return null;
+        }
+        return new String(bytes);
+    }
 
-    void store(String name, byte[] secret, char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException, KeyStoreException;
+    byte[] retrieveEncoded(String name);
 
-    byte[] retrieve(String name) throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException;
-
-    byte[] retrieve(String name, char[] password);
+    byte[] retrieveEncoded(String name, char[] password);
 
     void delete(String name);
 

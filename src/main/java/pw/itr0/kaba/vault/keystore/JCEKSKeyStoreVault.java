@@ -18,9 +18,10 @@ import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import pw.itr0.kaba.util.CharUtil;
 import pw.itr0.kaba.vault.Vault;
 
-public class JCEKSKeyStoreVault implements Vault<KeyStoreEntry> {
+public class JCEKSKeyStoreVault implements Vault {
 
     private final KeyStore keyStore;
 
@@ -47,16 +48,16 @@ public class JCEKSKeyStoreVault implements Vault<KeyStoreEntry> {
     }
 
     @Override
-    public void store(String name, KeyStoreEntry secret) throws NoSuchAlgorithmException, InvalidKeySpecException, KeyStoreException {
-        PBEKeySpec spec = secret.getKeySpec();
+    public void store(String name, byte[] secret) throws NoSuchAlgorithmException, InvalidKeySpecException, KeyStoreException {
+        PBEKeySpec spec = new PBEKeySpec(CharUtil.chars(secret));
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithHMACSHA512AndAES_128");
         keyStore.setEntry(name, new SecretKeyEntry(keyFactory.generateSecret(spec)), null);
     }
 
     @Override
-    public void store(String name, KeyStoreEntry secret, char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException,
+    public void store(String name, byte[] secret, char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException,
             KeyStoreException {
-        PBEKeySpec spec = secret.getKeySpec();
+        PBEKeySpec spec = new PBEKeySpec(CharUtil.chars(secret));
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithHMACSHA512AndAES_128");
         keyStore.setEntry(name, new SecretKeyEntry(keyFactory.generateSecret(spec)), new PasswordProtection(password));
     }

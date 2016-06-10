@@ -25,7 +25,7 @@ import pw.itr0.kaba.keystore.impl.PlainPasswordKeyStore;
 import pw.itr0.kaba.util.CharUtil;
 import pw.itr0.kaba.vault.Vault;
 
-public class SecretKeyStoreVault implements Vault<byte[]> {
+public class SecretKeyStoreVault implements Vault {
 
     private final KeyStore keyStore;
 

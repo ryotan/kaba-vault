@@ -12,7 +12,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import pw.itr0.kaba.exception.MissImplementationException;
+import pw.itr0.kaba.exception.ImplementationError;
 import pw.itr0.kaba.util.CharUtil;
 
 /**
@@ -115,13 +115,13 @@ public final class PBE {
             cipher.init(mode, keyFactory.generateSecret(keySpec), paramSpec);
             return cipher;
         } catch (NoSuchAlgorithmException e) {
-            throw new MissImplementationException("Encryption/decryption algorithm must be statically implemented. This exception must not occur.", e);
+            throw new ImplementationError("Encryption/decryption algorithm must be statically implemented. This exception must not occur.", e);
         } catch (NoSuchPaddingException e) {
-            throw new MissImplementationException("Padding algorithm must be statically implemented. This exception must not occur.", e);
+            throw new ImplementationError("Padding algorithm must be statically implemented. This exception must not occur.", e);
         } catch (InvalidKeySpecException e) {
-            throw new MissImplementationException("Key specification must be type safely implemented. This exception must not occur.", e);
+            throw new ImplementationError("Key specification must be type safely implemented. This exception must not occur.", e);
         } catch (InvalidAlgorithmParameterException e) {
-            throw new MissImplementationException("Algorithm parameter must be type safely implemented. This exception must not occur.", e);
+            throw new ImplementationError("Algorithm parameter must be type safely implemented. This exception must not occur.", e);
         }
     }
 

@@ -1,12 +1,12 @@
 package pw.itr0.kaba.exception;
 
 /**
- * The {@code MissImplementationException} class is a generic exception class to wrap checked Exception which cannot occur.
+ * The {@link ImplementationError} class is a generic exception class to wrap checked Exception which cannot occur if properly implemented.
  *
  * @author ryotan
  * @since 1.0.0
  */
-public class MissImplementationException extends RuntimeException {
+public class ImplementationError extends RuntimeException {
 
     /**
      * serial version UID.
@@ -18,7 +18,7 @@ public class MissImplementationException extends RuntimeException {
      *
      * @param message the detail message.
      */
-    public MissImplementationException(String message) {
+    public ImplementationError(String message) {
         super(message);
     }
 
@@ -28,7 +28,7 @@ public class MissImplementationException extends RuntimeException {
      * @param message the detail message.
      * @param cause   the cause.
      */
-    public MissImplementationException(String message, Throwable cause) {
+    public ImplementationError(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -38,7 +38,7 @@ public class MissImplementationException extends RuntimeException {
      *
      * @param cause the cause.
      */
-    public MissImplementationException(Throwable cause) {
+    public ImplementationError(Throwable cause) {
         super(cause);
     }
 
@@ -51,7 +51,7 @@ public class MissImplementationException extends RuntimeException {
      * @param enableSuppression  whether or not suppression is enabled or disabled
      * @param writableStackTrace whether or not the stack trace should be writable
      */
-    protected MissImplementationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected ImplementationError(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

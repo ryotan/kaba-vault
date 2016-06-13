@@ -5,10 +5,9 @@ import java.security.KeyStore.Entry;
 import java.security.KeyStore.SecretKeyEntry;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Base64;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
-
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import pw.itr0.kaba.encrypt.PBE;
 import pw.itr0.kaba.exception.ImplementationError;
@@ -24,7 +23,7 @@ public class PBEKeyEntry implements KeyStoreVaultStorage.Entry {
             SecureRandom random = SecureRandom.getInstanceStrong();
             byte[] bytes = new byte[16];
             random.nextBytes(bytes);
-            this.password = Base64.encode(bytes).toCharArray();
+            this.password = Base64.getEncoder().encodeToString(bytes).toCharArray();
             this.secret = PBE.getEncrypter().encrypt(secret, password);
         } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             throw new RuntimeException(e);  // TODO: Auto generated code.

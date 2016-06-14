@@ -20,7 +20,6 @@ import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -31,8 +30,8 @@ import pw.itr0.kaba.vault.VaultStorage;
 
 public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
 
-    private static final ConcurrentHashMap<Path, Thread> hooks = new ConcurrentHashMap<>();
-    private static final ThreadFactory tFactory = Executors.privilegedThreadFactory();
+    private static final ConcurrentHashMap<String, Thread> SHUTDOWN_HOOKS = new ConcurrentHashMap<>();
+    private static final ThreadFactory THREAD_FACTORY = Executors.defaultThreadFactory();
 
     private final KeyStore keyStore;
 
@@ -49,18 +48,14 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
             }
         }
 
-        Thread hook = tFactory.newThread(() -> {
-            System.out.println("Saving KeyStore file to path = " + path);
+        Thread hook = THREAD_FACTORY.newThread(() -> {
             try {
                 this.save(path, password);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save KeyStore file to " + path + ".", e);
             }
         });
-        hooks.compute(path, (p, orig) -> {
-            if (Objects.nonNull(orig)) {
-                Runtime.getRuntime().removeShutdownHook(orig);
-            }
+        SHUTDOWN_HOOKS.compute(path.toRealPath().toFile().getCanonicalPath(), (p, orig) -> {
             Runtime.getRuntime().addShutdownHook(hook);
             return hook;
         });
@@ -84,19 +79,15 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
                 }
             }
         } catch (ClosedChannelException ignore) {
-            StackTraceElement[] trace = ignore.getStackTrace();
-            boolean isIgnore = Stream.of(trace).anyMatch(elm ->{
-                String name = elm.getClassName();
-                String method = elm.getMethodName();
-                // Ignore ClosedChannelException on java.nio.channels.FileLock#release(), because KeyStore#store(OutputStream, char[]) closes OutputStream...
-                return "java.nio.channels.FileLock".equals(name) && "close".equals(method);
-            });
-
-            if (!isIgnore) {
+            // Ignore ClosedChannelException occurred at java.nio.channels.FileLock#release(),
+            // because KeyStore#store(OutputStream, char[]) closes OutputStream...
+            if (Stream.of(ignore.getStackTrace()).noneMatch(elm ->
+                    "java.nio.channels.FileLock".equals(elm.getClassName()) && "close".equals(elm.getMethodName()))) {
                 throw ignore;
             }
         } catch (OverlappingFileLockException e) {
-            System.err.println("Failed to get lock on KeyStore file, and skipped saving file. path=[" + path + "].");
+            throw new RuntimeException("Failed to get lock on KeyStore file, and skipped saving file." +
+                    "Multiple KeyStore instances of path=[" + path + "] might be created in current JVM.", e);
         }
     }
 

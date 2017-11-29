@@ -42,7 +42,7 @@ public final class PasswordUtil {
     public static String seal(byte[] password) throws GeneralSecurityException {
         Objects.requireNonNull(password, PASSWORD_MUST_NOT_BE_NULL);
 
-        char[] notSecretPassword = new char[] {
+        char[] notSecretPassword = {
                 '#', '#', '#', ' ', 'n', 'o', 't', ' ', 's', 'o', ' ', 'm', 'u', 'c', 'h', ' ', 's', 'e', 'c', 'r', 'e', 't', ' ', 'p', 'a', 's',
                 's', 'w', 'o', 'r', 'd', ' ', '*', '*', '*'
         };
@@ -70,7 +70,7 @@ public final class PasswordUtil {
             return password.getBytes();
         }
 
-        char[] notSecretPassword = new char[] {
+        char[] notSecretPassword = {
                 '#', '#', '#', ' ', 'n', 'o', 't', ' ', 's', 'o', ' ', 'm', 'u', 'c', 'h', ' ', 's', 'e', 'c', 'r', 'e', 't', ' ', 'p', 'a', 's',
                 's', 'w', 'o', 'r', 'd', ' ', '*', '*', '*'
         };

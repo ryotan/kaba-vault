@@ -1,13 +1,11 @@
 package pw.itr0.kaba.vault.keystore;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.List;
-
 import pw.itr0.kaba.vault.Vault;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.util.List;
 
 public class KeyStoreVault implements Vault {
 
@@ -16,43 +14,43 @@ public class KeyStoreVault implements Vault {
     public KeyStoreVault(Path file, char[] password) {
         try {
             this.storage = new KeyStoreVaultStorage(file, password);
-        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to load KeyStore file. path=[" + file + "].", e);
         }
     }
 
     @Override
     public List<String> list() {
-        return storage.list();
+        return this.storage.list();
     }
 
     @Override
     public boolean contains(String name) {
-        return storage.contains(name);
+        return this.storage.contains(name);
     }
 
     @Override
     public void store(String name, byte[] secret) {
-        storage.store(name, new PBEKeyEntry(secret));
+        this.storage.store(name, new PBEKeyEntry(secret));
     }
 
     @Override
     public void store(String name, byte[] secret, char[] password) {
-        storage.store(name, new PBEKeyEntry(secret), password);
+        this.storage.store(name, new PBEKeyEntry(secret), password);
     }
 
     @Override
     public byte[] retrieveEncoded(String name) {
-        return storage.retrieve(name);
+        return this.storage.retrieve(name);
     }
 
     @Override
     public byte[] retrieveEncoded(String name, char[] password) {
-        return storage.retrieve(name, password);
+        return this.storage.retrieve(name, password);
     }
 
     @Override
     public void delete(String name) {
-        storage.delete(name);
+        this.storage.delete(name);
     }
 }

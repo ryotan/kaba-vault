@@ -1,8 +1,12 @@
 package pw.itr0.kaba.vault.keystore;
 
+import pw.itr0.kaba.exception.ImplementationError;
+import pw.itr0.kaba.vault.VaultStorage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.nio.channels.Channels;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileChannel;
@@ -25,26 +29,38 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Stream;
 
-import pw.itr0.kaba.exception.ImplementationError;
-import pw.itr0.kaba.vault.VaultStorage;
-
 public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
 
     private static final ConcurrentHashMap<String, Thread> SHUTDOWN_HOOKS = new ConcurrentHashMap<>();
     private static final ThreadFactory THREAD_FACTORY = Executors.defaultThreadFactory();
 
     private final KeyStore keyStore;
+    private final String KEYSTORE_TYPE= "JCEKS";
 
-    public KeyStoreVaultStorage(Path path, char[] password) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
-        keyStore = KeyStore.getInstance("JCEKS");
+    public KeyStoreVaultStorage(Path path, char[] password) throws IOException {
+        try {
+            keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
+        } catch (KeyStoreException e) {
+            throw new IllegalStateException("Could not find KeyStore Provider of " + KEYSTORE_TYPE + '.', e);
+        }
         if (Files.exists(path)) {
             try (InputStream file = Files.newInputStream(path)) {
                 keyStore.load(file, password);
+            } catch (CertificateException e) {
+                throw new ImplementationError("This vault cannot store Certificates.", e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new ImplementationError("Algorithm must be statically implemented. This exception must not occur.", e);
             }
         } else {
-            keyStore.load(null, password);
             try (OutputStream file = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+                keyStore.load(null, password);
                 keyStore.store(file, password);
+            } catch (CertificateException e) {
+                throw new ImplementationError("This vault cannot store Certificates.", e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new ImplementationError("Algorithm must be statically implemented. This exception must not occur.", e);
+            } catch (KeyStoreException e) {
+                throw new IllegalStateException("KeyStore is not initialized.", e);
             }
         }
 
@@ -52,7 +68,7 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
             try {
                 this.save(path, password);
             } catch (IOException e) {
-                throw new RuntimeException("Failed to save KeyStore file to " + path + ".", e);
+                throw new UncheckedIOException("Failed to save KeyStore file to " + path + '.', e);
             }
         });
         SHUTDOWN_HOOKS.compute(path.toRealPath().toFile().getCanonicalPath(), (p, orig) -> {
@@ -65,8 +81,8 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
     public void save(Path path, char[] password) throws IOException {
 
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-                FileLock lock = channel.lock(0, Long.MAX_VALUE, false);
-                OutputStream file = Channels.newOutputStream(channel)) {
+             FileLock lock = channel.lock(0, Long.MAX_VALUE, false);
+             OutputStream file = Channels.newOutputStream(channel)) {
             if (lock != null) {
                 try {
                     keyStore.store(file, password);
@@ -86,7 +102,7 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
                 throw ignore;
             }
         } catch (OverlappingFileLockException e) {
-            throw new RuntimeException("Failed to get lock on KeyStore file, and skipped saving file." +
+            throw new IllegalStateException("Failed to get lock on KeyStore file, and skipped saving file." +
                     "Multiple KeyStore instances of path=[" + path + "] might be created in current JVM.", e);
         }
     }
@@ -111,7 +127,7 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
 
     @Override
     public void store(String name, VaultStorage.Entry<? extends KeyStore.Entry> entry) {
-        store(name, entry, new char[] {' '});
+        store(name, entry, new char[]{' '});
     }
 
     @Override
@@ -125,7 +141,7 @@ public class KeyStoreVaultStorage implements VaultStorage<KeyStore.Entry> {
 
     @Override
     public byte[] retrieve(String name) {
-        return retrieve(name, new char[] {' '});
+        return retrieve(name, new char[]{' '});
     }
 
     @Override

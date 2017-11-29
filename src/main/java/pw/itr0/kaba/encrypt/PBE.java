@@ -1,11 +1,8 @@
 package pw.itr0.kaba.encrypt;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.InvalidKeySpecException;
+import pw.itr0.kaba.exception.ImplementationError;
+import pw.itr0.kaba.util.CharUtil;
+
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
@@ -13,9 +10,12 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-
-import pw.itr0.kaba.exception.ImplementationError;
-import pw.itr0.kaba.util.CharUtil;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * Utility class for PBE encryption/decryption.
@@ -40,7 +40,7 @@ public final class PBE {
     /**
      * Default salt bytes of PBE encryption.
      */
-    private static final byte[] DEFAULT_SALT = new byte[] {
+    private static final byte[] DEFAULT_SALT = {
             (byte) 0xd8, (byte) 0x3d, (byte) 0xde, (byte) 0x0b, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8,
             (byte) 0xd8, (byte) 0x3d, (byte) 0xde, (byte) 0x0b, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8, (byte) 0xd8
     };
